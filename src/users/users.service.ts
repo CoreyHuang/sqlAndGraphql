@@ -1,10 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm';
+import { UserMysql } from '../user-mysql/entities/user-mysql.entity'
 
 @Injectable()
 export class UsersService {
-  create(createUserInput: CreateUserInput) {
+  constructor(@InjectRepository(UserMysql) private userRepository: Repository<UserMysql>) { }
+
+  async create(createUserInput: CreateUserInput) {
+     await this.userRepository.save({
+      "createTime": "2022-05-02 19:14:12",
+      "updateTime": "2022-05-02 19:14:12",
+      "title": "qa",
+      "content": "123",
+      "isDelete": false
+    })
+
     return {
       exampleField: 2
     };

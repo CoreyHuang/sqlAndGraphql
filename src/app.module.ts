@@ -5,6 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { UsersModule } from './users/users.module';
+import { UserMysqlModule } from './user-mysql/user-mysql.module';
+import { TypeOrmModule } from '@nestjs/typeorm'
 
 @Resolver()
 export class FooResolver {
@@ -21,6 +23,20 @@ export class FooResolver {
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     UsersModule,
+    UserMysqlModule,
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: 'password',
+      database: 'fortest',
+      entities: [__dirname + '/../**/*.entity.js'], //--------------------
+      // entities: [__dirname + '/'],
+      // entities: [__dirname + '/../**/*.entity.{js,ts}'],
+      autoLoadEntities: true,
+      synchronize: true
+    })
   ],
   controllers: [AppController],
   providers: [AppService, FooResolver],
